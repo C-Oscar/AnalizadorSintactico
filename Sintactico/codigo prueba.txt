@@ -1,0 +1,25 @@
+int main(){
+string a;
+double m;
+int e=10;
+if(true){}
+if(b!=true){}
+if(c<5){}
+if(z==c){}
+if(z=="la"){
+continue;
+}
+printf(a);
+printf("hola");
+scanf("%y",&& a);
+union local87 {
+int i;
+double z=10;
+} mu, *muptr=&mu;
+struct {
+string nombre;
+char inicial;
+int edad;
+float nota;
+} persona;
+}
