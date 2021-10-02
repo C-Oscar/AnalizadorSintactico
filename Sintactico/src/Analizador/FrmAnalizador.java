@@ -22,6 +22,10 @@ public class FrmAnalizador extends javax.swing.JFrame {
     public FrmAnalizador() {
         Archivo="";
         initComponents();
+        btnAssemble.setEnabled(false);
+        btnGenEjecutable.setEnabled(false);
+        btnGenObjeto.setEnabled(false);
+        btnEjecutable.setEnabled(false);
     }
 
     /**
@@ -215,6 +219,15 @@ public class FrmAnalizador extends javax.swing.JFrame {
                 cont++;
                 result += "LINEA " + cont + "\n";
                 break;
+                case Using:
+                result += " <Reservada Using>\t\t" + lexicos.lexeme + "\n";
+                break;
+                case Namespace:
+                result += " <Reservada Namespace>\t\t" + lexicos.lexeme + "\n";
+                break;
+                case Std:
+                result += " <Palabra reservada Std>\t\t" + lexicos.lexeme + "\n";
+                break;
                 case Comillas:
                 result += " <Comillas>\t\t" + lexicos.lexeme + "\n";
                 break;
@@ -223,6 +236,9 @@ public class FrmAnalizador extends javax.swing.JFrame {
                 break;
                 case B_Slash:
                 result += " <Back slash>\t\t" + lexicos.lexeme + "\n";
+                break;
+                case toString:
+                result += " <Operador toString>\t\t" + lexicos.lexeme + "\n";
                 break;
                 case Cadena:
                 result += " <Tipo de dato>\t\t" + lexicos.lexeme + "\n";
@@ -453,7 +469,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try{
             if(Archivo.equals(""))
-                Archivo="./archivo.c";
+                Archivo="./prueba.cpp";
             FileWriter guardar = new FileWriter(Archivo);
             guardar.write(txtACod.getText());
             guardar.close();
@@ -470,6 +486,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
             String[] intermedio = {"intermedio.bat"};
             Runtime.getRuntime().exec(intermedio);
             System.out.println("Ejecucion del convertidor de cpp a intermedio");
+            btnAssemble.setEnabled(true);
         } catch (IOException ex) {
             System.out.println(ex);
         }
@@ -482,6 +499,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
             String[] gobjeto = {"objeto.bat"};
             Runtime.getRuntime().exec(gobjeto);
             System.out.println("Ejecucion del convertidor de assembler a objeto");
+            btnGenEjecutable.setEnabled(true);
         } catch (IOException ex) {
             System.out.println(ex);
         } catch (InterruptedException ex) {
@@ -507,6 +525,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
             String[] gassembler = {"ensamblador.bat"};
             Runtime.getRuntime().exec(gassembler);
             System.out.println("Ejecucion del convertidor de intermedio a assembler");
+            btnGenObjeto.setEnabled(true);
         } catch (IOException ex) {
             System.out.println(ex);
         }
@@ -517,6 +536,7 @@ public class FrmAnalizador extends javax.swing.JFrame {
             String[] gejecutable = {"ejecutable.bat"};
             Runtime.getRuntime().exec(gejecutable);
             System.out.println("Ejecucion del convertidor de objeto a ejecutable");
+            btnEjecutable.setEnabled(true);
         } catch (IOException ex) {
             System.out.println(ex);
         }

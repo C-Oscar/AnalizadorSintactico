@@ -1,0 +1,278 @@
+package Analizador;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Int, Goto, Extern, Char, Comillas_S, Vacio, Corchete_a, Division, Continue,Double, Long, Short, Const, Struct, Comillas, T_datoN, Cadena, Include,
+    If, Else, Do, While, For, Switch, Case, Break, Print, Scan, Gets, Fgets, Resta, Enum, Default, Union, Nulo, Return, Corchete_c, B_Slash,
+    Unsigned, Sistema, SizeOf, Igual, Modulo, Op_logico, Op_relacional, Op_atribucion, Op_incremento, Define, Multiplicacion, S,Suma, ERROR,
+    Op_booleano, Numeral, Parentesis_a, Parentesis_c, Llave_a, Llave_c,
+    Main, P_coma, Dos_P, Punto, Coma, Identificador, Register, Typedef, Numero;
+non terminal INICIO, SENTENCIA, VARIABLE,EXTERN,DECLARACION, DECLARACION_FOR, IF, ELSE, STRUCT, 
+    WHILE,DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, PRINT, INCLUDE,
+    SENTENCIA_INCLUDE, LIBRERIA, TIPO_DECLARACION_N, TIPO_DECLARACION_C, CONST,TIPO_SENTENCIA_B,
+    TIPO_FOR, TIPO_PRINT, LEER_T, SYSTEM, SIZEOF, UNSIGNED, SWITCH, CASE, DEFINE, REGISTER, TYPE_DEF, SENTENCIA_RETORNO, CADENA,
+    CHAR, ENUM, UNION;
+
+start with INICIO;
+
+INICIO ::= 
+    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Vacio Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA CONST |
+    CONST |
+    SENTENCIA REGISTER |
+    REGISTER |
+    SENTENCIA EXTERN |
+    EXTERN |
+    SENTENCIA IF | 
+    SENTENCIA SENTENCIA_RETORNO |
+    SENTENCIA_RETORNO |
+    IF |    
+    SENTENCIA ELSE |
+    ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    SENTENCIA DO_WHILE |
+    DO_WHILE |
+    SENTENCIA FOR |
+    FOR |
+    SENTENCIA PRINT |
+    PRINT |
+    SENTENCIA TYPE_DEF |
+    TYPE_DEF | 
+    SENTENCIA STRUCT |
+    STRUCT |
+    SENTENCIA SWITCH |
+    SWITCH |
+    SENTENCIA LEER_T |
+    SENTENCIA SYSTEM |
+    SENTENCIA SIZEOF |
+    SENTENCIA UNSIGNED |
+    LEER_T |
+    SYSTEM |
+    SIZEOF |
+    UNSIGNED
+;
+DECLARACION ::=  
+    Int Identificador P_coma | 
+    Int Identificador TIPO_DECLARACION_N P_coma |
+    Int Identificador Igual Numero Punto Numero P_coma |   
+    Int Op_incremento Identificador P_coma |
+    Int Identificador Op_atribucion Numero Punto Numero P_coma |
+    T_datoN Identificador P_coma | 
+    T_datoN Identificador TIPO_DECLARACION_N P_coma |
+    T_datoN Identificador Igual Numero Punto Numero P_coma |   
+    T_datoN Op_incremento Identificador P_coma |
+    T_datoN Identificador Op_atribucion Numero Punto Numero P_coma |
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
+    Cadena Identificador Igual Comillas Comillas P_coma |
+    Cadena Identificador P_coma |
+    CHAR Igual Comillas CADENA Comillas P_coma |
+    CHAR Igual Comillas Comillas P_coma |
+    CHAR P_coma |
+    ENUM    |
+    UNION   |
+    Continue P_coma
+;
+CADENA::=
+    Identificador |Numero |Dos_P |Coma |Punto |P_coma |Resta |Suma |Multiplicacion |Division |Modulo |
+    Parentesis_a|Parentesis_c |
+    CADENA Identificador |
+    CADENA Numero |
+    CADENA Dos_P |
+    CADENA Coma |
+    CADENA Punto |
+    CADENA P_coma |
+    CADENA Resta |
+    CADENA Suma |
+    CADENA Multiplicacion |
+    CADENA Division |
+    CADENA Modulo |
+    CADENA Parentesis_a| CADENA Parentesis_c
+;
+
+CHAR ::=
+    Char Identificador  |
+    Char Identificador Corchete_a Corchete_c    |
+    Char Identificador Corchete_a Numero Corchete_c
+;
+
+TIPO_DECLARACION_N ::=
+    Op_atribucion Numero |
+    Igual Numero |
+    Op_incremento
+;
+TIPO_DECLARACION_C ::=
+    Comillas Comillas
+;
+ELSE ::=
+    IF Else Llave_a SENTENCIA Llave_c |
+    IF Else IF
+;
+IF ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c |
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a Llave_c
+;
+SENTENCIA_RETORNO ::=
+    Return Identificador P_coma|
+    Return Numero P_coma|
+    Return Comillas CADENA Comillas P_coma|
+    Return Comillas_S CADENA Comillas_S P_coma|
+    Return SENTENCIA_BOOLEANA P_coma
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_booleano | 
+    Identificador Op_relacional Op_booleano |
+    Identificador Op_relacional Numero |
+    Identificador Op_relacional Identificador |
+    Identificador Op_relacional Comillas Comillas |
+    Identificador Op_relacional Comillas Identificador Comillas
+;
+
+TIPO_SENTENCIA_B ::=
+    Op_booleano |
+    Numero |
+    Identificador |
+    Comillas Comillas |
+    Comillas Identificador Comillas
+;
+SWITCH ::=
+    Switch Parentesis_a Identificador Parentesis_c Llave_a CASE Llave_c |
+    Switch Parentesis_a Numero Parentesis_c Llave_a CASE Llave_c |
+    Switch Parentesis_a DECLARACION Parentesis_c Llave_a CASE Llave_c
+;
+CASE ::=
+    Case Numero Dos_P |
+    Case Identificador Dos_P |
+    Case Numero Dos_P SENTENCIA Break P_coma |
+    Case Identificador Dos_P SENTENCIA Break P_coma |
+    Case Comillas Identificador Comillas Dos_P SENTENCIA Break P_coma |
+    Case Comillas_S Identificador Comillas_S Dos_P SENTENCIA Break P_coma |
+    Case Numero Dos_P SENTENCIA|
+    Case Identificador Dos_P SENTENCIA |
+    Case Comillas Identificador Comillas Dos_P SENTENCIA |
+    Case Comillas_S Identificador Comillas_S Dos_P SENTENCIA |
+    Default Dos_P SENTENCIA |
+    Default Dos_P SENTENCIA Break P_coma |
+    CASE Case Numero Dos_P |
+    CASE Case Identificador Dos_P |
+    CASE Case Numero Dos_P SENTENCIA Break P_coma |
+    CASE Case Identificador Dos_P SENTENCIA Break P_coma |
+    CASE Case Comillas Identificador Comillas Dos_P SENTENCIA Break P_coma |
+    CASE Case Comillas_S Identificador Comillas_S Dos_P SENTENCIA Break P_coma |
+    CASE Default Dos_P SENTENCIA |
+    CASE Default Dos_P SENTENCIA Break P_coma |
+    CASE Case Numero Dos_P SENTENCIA|
+    CASE Case Identificador Dos_P SENTENCIA |
+    CASE Case Comillas Identificador Comillas Dos_P SENTENCIA |
+    CASE Case Comillas_S Identificador Comillas_S Dos_P SENTENCIA 
+;  
+WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
+;
+FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA_FOR ::=
+    T_datoN TIPO_FOR |
+    TIPO_FOR
+;
+
+TIPO_FOR ::=
+    Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
+;
+
+DECLARACION_FOR ::= 
+    Identificador Op_atribucion Numero |
+    Identificador Op_incremento | 
+    Op_incremento Identificador
+;
+
+PRINT ::= 
+    Print Parentesis_a TIPO_PRINT Parentesis_c P_coma
+;
+
+TIPO_PRINT ::=
+    Identificador |
+    Comillas Identificador Comillas
+;
+LEER_T ::=
+    Scan Parentesis_a Comillas Modulo Identificador Comillas Coma Op_logico Identificador Parentesis_c P_coma |
+    Fgets Parentesis_a Identificador Coma Identificador Coma Identificador Parentesis_c P_coma |
+    Gets Parentesis_a Identificador Parentesis_c P_coma
+;
+SYSTEM ::=
+    Sistema Parentesis_a Comillas Identificador Comillas Parentesis_c P_coma
+;
+SIZEOF ::=
+    SizeOf Parentesis_a Identificador Parentesis_c P_coma
+;
+UNSIGNED ::=
+    Unsigned DECLARACION
+;
+REGISTER ::=
+    Register DECLARACION
+;
+EXTERN ::= 
+    Extern DECLARACION
+;
+CONST ::=
+    Const DECLARACION
+;
+ENUM ::=
+    Enum Identificador Llave_a CADENA Llave_c P_coma
+;
+STRUCT ::=
+    Struct Identificador Llave_a SENTENCIA Llave_c P_coma   |
+    Struct Llave_a SENTENCIA Llave_c Identificador P_coma 
+;
+UNION ::=
+    Union Identificador Llave_a SENTENCIA Llave_c Identificador Igual Llave_a Numero Llave_c P_coma   |
+    Union Identificador Llave_a SENTENCIA Llave_c Identificador Coma Multiplicacion Identificador Igual Op_logico Identificador P_coma
+;
+TYPE_DEF ::= 
+    Typedef DECLARACION |
+    Typedef UNSIGNED |
+    Typedef REGISTER |
+    Typedef EXTERN |
+    Typedef CONST
+;
+DEFINE ::= 
+    Numeral Define Identificador Numero
+;
+INCLUDE ::= 
+    Numeral Include SENTENCIA_INCLUDE P_coma
+;
+SENTENCIA_INCLUDE ::=
+    Op_relacional LIBRERIA Op_relacional |
+    Comillas LIBRERIA Comillas 
+;
+LIBRERIA ::=
+    Identificador Punto Identificador |
+    Identificador 
+;
+VARIABLE ::=
+    Int |
+    Goto |
+    Long | 
+    Short |
+    Double | 
+;

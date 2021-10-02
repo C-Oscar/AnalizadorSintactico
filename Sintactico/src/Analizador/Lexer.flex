@@ -20,7 +20,7 @@ espacio=[ \t \r]+
 ( "//"(.)* ) {/*Ignore*/}
 
 /* Salto de linea */
-( "\n" ) {return Linea;}
+( \n ) {return Linea;}
 
 /* Comillas */
 ( "\"" ) {lexeme=yytext(); return Comillas;}
@@ -30,6 +30,15 @@ espacio=[ \t \r]+
 
 /* Back Slash*/
 ( "\\" ) {lexeme=yytext(); return B_Slash;}
+
+/* Palabra reservada Using */
+( using ) {lexeme=yytext(); return Using;}
+
+/* Palabra reservada Namespace */
+( namespace ) {lexeme=yytext(); return Namespace;}
+
+/* Palabra reservada Std */
+( std ) {lexeme=yytext(); return Std;}
 
 /* Tipos de datos numericos*/
 ( byte | long | float | double ) {lexeme=yytext(); return T_datoN;}

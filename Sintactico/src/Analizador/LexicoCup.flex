@@ -38,6 +38,15 @@ espacio=[ \t \r \n]+
 /*Back Slash*/
 ( "\\" ) {return new Symbol(sym.B_Slash, yychar, yyline, yytext());}
 
+/* Palabra reservada Using */
+( using ) {return new Symbol(sym.Using, yychar, yyline, yytext());}
+
+/* Palabra reservada Namespace */
+( namespace ) {return new Symbol(sym.Namespace, yychar, yyline, yytext());}
+
+/* Palabra reservada Std */
+( std ) {return new Symbol(sym.Std, yychar, yyline, yytext());}
+
 /* Tipos de datos */
 ( byte | long | float | double | goto | short ) {return new Symbol(sym.T_datoN, yychar, yyline, yytext());}
 
@@ -84,7 +93,7 @@ espacio=[ \t \r \n]+
 ( case ) {return new Symbol(sym.Case, yychar, yyline, yytext());}
 
 /* Palabra reservada Break */
-( Break ) {return new Symbol(sym.Break, yychar, yyline, yytext());}
+( break ) {return new Symbol(sym.Break, yychar, yyline, yytext());}
 
 /* Palabra reservada Default */
 ( default ) {return new Symbol(sym.Default, yychar, yyline, yytext());}

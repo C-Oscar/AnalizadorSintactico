@@ -19,16 +19,18 @@ terminal Int, Goto, Extern, Char, Comillas_S, Vacio, Corchete_a, Division, Conti
     If, Else, Do, While, For, Switch, Case, Break, Print, Scan, Gets, Fgets, Resta, Enum, Default, Union, Nulo, Return, Corchete_c, B_Slash,
     Unsigned, Sistema, SizeOf, Igual, Modulo, Op_logico, Op_relacional, Op_atribucion, Op_incremento, Define, Multiplicacion, S,Suma, ERROR,
     Op_booleano, Numeral, Parentesis_a, Parentesis_c, Llave_a, Llave_c,
-    Main, P_coma, Dos_P, Punto, Coma, Identificador, Register, Typedef, Numero;
+    Main, P_coma, Dos_P, Punto, Coma, Identificador, Register, Typedef, Numero, Using, Namespace, Std, toString, Linea;
 non terminal INICIO, SENTENCIA, VARIABLE,EXTERN,DECLARACION, DECLARACION_FOR, IF, ELSE, STRUCT, 
     WHILE,DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, PRINT, INCLUDE,
     SENTENCIA_INCLUDE, LIBRERIA, TIPO_DECLARACION_N, TIPO_DECLARACION_C, CONST,TIPO_SENTENCIA_B,
     TIPO_FOR, TIPO_PRINT, LEER_T, SYSTEM, SIZEOF, UNSIGNED, SWITCH, CASE, DEFINE, REGISTER, TYPE_DEF, SENTENCIA_RETORNO, CADENA,
-    CHAR, ENUM, UNION;
+    CADENA_CON_SALTO, CHAR, ENUM, UNION;
 
 start with INICIO;
 
 INICIO ::= 
+    LIBRERIA |
+    Using Namespace Std P_coma INICIO|
     Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
     Vacio Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
     Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
@@ -71,7 +73,11 @@ SENTENCIA ::=
     SIZEOF |
     UNSIGNED
 ;
-DECLARACION ::=  
+DECLARACION ::= 
+    Identificador Igual Identificador Suma Identificador P_coma |
+    Identificador Igual Identificador Resta Identificador P_coma |
+    Identificador Igual Identificador Multiplicacion Identificador P_coma |
+    Identificador Igual Identificador Division Identificador P_coma |
     Int Identificador P_coma | 
     Int Identificador TIPO_DECLARACION_N P_coma |
     Int Identificador Igual Numero Punto Numero P_coma |   
@@ -108,7 +114,9 @@ CADENA::=
     CADENA Modulo |
     CADENA Parentesis_a| CADENA Parentesis_c
 ;
-
+CADENA_CON_SALTO ::=
+    CADENA Linea
+;
 CHAR ::=
     Char Identificador  |
     Char Identificador Corchete_a Corchete_c    |
@@ -212,10 +220,16 @@ PRINT ::=
 
 TIPO_PRINT ::=
     Identificador |
-    Comillas Identificador Comillas
+    Modulo Identificador  |
+    Comillas CADENA Comillas |
+    Comillas B_Slash Identificador CADENA Comillas |
+    Comillas B_Slash Identificador CADENA Comillas Coma Identificador |
+    Comillas CADENA B_Slash Identificador Comillas
 ;
 LEER_T ::=
-    Scan Parentesis_a Comillas Modulo Identificador Comillas Coma Op_logico Identificador Parentesis_c P_coma |
+    Scan Parentesis_a Comillas CADENA Comillas Coma Identificador Parentesis_c P_coma |
+    Scan Parentesis_a Identificador Parentesis_c P_coma |
+    Scan Parentesis_a Comillas CADENA Comillas Coma Op_logico Identificador Parentesis_c P_coma |
     Fgets Parentesis_a Identificador Coma Identificador Coma Identificador Parentesis_c P_coma |
     Gets Parentesis_a Identificador Parentesis_c P_coma
 ;
@@ -265,9 +279,9 @@ SENTENCIA_INCLUDE ::=
     Op_relacional LIBRERIA Op_relacional |
     Comillas LIBRERIA Comillas 
 ;
-LIBRERIA ::=
-    Identificador Punto Identificador |
-    Identificador 
+LIBRERIA ::= 
+    Numeral Include Op_relacional Identificador Op_relacional INICIO |
+    Numeral Include Op_relacional Identificador Punto Identificador Op_relacional INICIO
 ;
 VARIABLE ::=
     Int |

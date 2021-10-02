@@ -1,0 +1,2 @@
+start prueba
+exit
